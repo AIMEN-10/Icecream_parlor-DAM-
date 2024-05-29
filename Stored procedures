@@ -1,0 +1,34 @@
+--------add new admin-----------------
+create proc admin1(
+@Email varchar(100),
+@username varchar(100),
+@password varchar(100)
+)
+as
+begin 
+declare @count int=0
+select @count=count(*) from admin where email=@Email
+if(@count=1)
+print'abc'
+
+else
+insert into admin (username,email,password) values (@username,@email,@password);
+end;
+--------------------------add new products----------------
+create proc product1(
+@name varchar(100),
+@singlep int,
+@doublep int,
+@familyp int,
+@path varchar(100)
+)
+as
+begin 
+declare @count int=0
+select @count=count(*) from product where name=@name
+if(@count=1)
+print'abc'
+
+else
+insert into product values (@name,@singlep,@doublep,@familyp,@path);
+end;
