@@ -32,3 +32,46 @@ print'abc'
 else
 insert into product values (@name,@singlep,@doublep,@familyp,@path);
 end;
+--------------------------------
+create proc product4(
+@name varchar(100),
+@singlep int,
+@doublep int,
+@familyp int,
+@path varchar(100)
+)
+as
+begin 
+declare @count int=0
+select @count=count(*) from product where name=@name
+if(@count=1)
+print'abc'
+
+else
+INSERT INTO product (name, singlep, doublep, familyp, path)
+SELECT 
+   name,singlep,doublep,familyp,path from product
+WHERE 
+    name LIKE '%sandwitch%' OR 
+    name LIKE '%sandwitches%' OR 
+    name LIKE '%sundaes%' OR 
+    name LIKE '%sundae%' OR 
+    name LIKE '%stick%' OR 
+    name LIKE '%sticks%' OR 
+    name LIKE '%bar%' OR 
+    name LIKE '%bars%' OR 
+    name LIKE '%blizzard%' OR 
+    name LIKE '%cups%' OR 
+    name LIKE '%cup%' OR 
+    name LIKE '%cones%' OR 
+    name LIKE '%cone%' OR 
+    name LIKE '%mochi%' OR 
+    name LIKE '%tacos%' OR 
+    name LIKE '%pie%' OR 
+    name LIKE '%pies%' OR 
+    name LIKE '%bombs%' OR 
+    name LIKE '%macrones%' OR 
+    name LIKE '%popsicles%' OR 
+    name LIKE '%screwballs%';
+
+end;
