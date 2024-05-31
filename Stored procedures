@@ -75,7 +75,7 @@ WHERE
     name LIKE '%screwballs%';
 
 end;
----------------------------orders
+---------------------------orders-------------------
 create proc order_proc(
 @dt datetime,
 @id int,
@@ -87,6 +87,7 @@ begin
 insert into orders(order_time,order_id,bill) values (@dt,@id,@bill);
 end;
 select * from orders_list
+##########################
 create proc o_proc(
 @id int,
 @val varchar(100),
@@ -98,3 +99,34 @@ begin
 
 insert into orders_list(order_id,name,detail,quantity) values (@id,@val,@detail,@quant);
 end;
+-----------------------------------ADMIN LOGIN-------------
+CREATE PROCEDURE login_5
+    @Username VARCHAR(50),
+    @Password VARCHAR(50) OUTPUT
+AS
+BEGIN
+    DECLARE @Pwd VARCHAR(50);
+
+    DECLARE @PasswordTable TABLE (Password VARCHAR(50));
+
+    DECLARE cur_login CURSOR STATIC FOR
+    SELECT password FROM admin WHERE username = @Username;
+
+    OPEN cur_login;
+
+    FETCH NEXT FROM cur_login INTO @Pwd;
+    IF @@FETCH_STATUS = 0
+    BEGIN
+        
+        INSERT INTO @PasswordTable (Password) VALUES (@Pwd);
+        
+       
+        SET @Password = @Pwd;
+    END
+
+    CLOSE cur_login;
+    DEALLOCATE cur_login;
+
+  
+    SELECT Password FROM @PasswordTable;
+END;
