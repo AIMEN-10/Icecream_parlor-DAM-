@@ -75,3 +75,26 @@ WHERE
     name LIKE '%screwballs%';
 
 end;
+---------------------------orders
+create proc order_proc(
+@dt datetime,
+@id int,
+@bill int
+)
+as
+begin 
+
+insert into orders(order_time,order_id,bill) values (@dt,@id,@bill);
+end;
+select * from orders_list
+create proc o_proc(
+@id int,
+@val varchar(100),
+@detail varchar(100),
+@quant varchar(100)
+)
+as
+begin 
+
+insert into orders_list(order_id,name,detail,quantity) values (@id,@val,@detail,@quant);
+end;
