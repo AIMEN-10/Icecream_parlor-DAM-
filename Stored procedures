@@ -15,66 +15,97 @@ else
 insert into admin (username,email,password) values (@username,@email,@password);
 end;
 --------------------------add new products----------------
-create proc product1(
-@name varchar(100),
-@singlep int,
-@doublep int,
-@familyp int,
-@path varchar(100)
-)
-as
-begin 
-declare @count int=0
-select @count=count(*) from product where name=@name
-if(@count=1)
-print'abc'
+CREATE TRIGGER trg_product_name_validation
+ON product
+AFTER INSERT
+AS
+BEGIN
+    -- Declare a variable to store the name
+    DECLARE @name VARCHAR(100);
 
-else
-insert into product values (@name,@singlep,@doublep,@familyp,@path);
-end;
---------------------------------
-create proc product4(
-@name varchar(100),
-@singlep int,
-@doublep int,
-@familyp int,
-@path varchar(100)
-)
-as
-begin 
-declare @count int=0
-select @count=count(*) from product where name=@name
-if(@count=1)
-print'abc'
+    -- Retrieve the name from the inserted row
+    SELECT @name = name FROM inserted;
 
-else
-INSERT INTO product (name, singlep, doublep, familyp, path)
-SELECT 
-   name,singlep,doublep,familyp,path from product
-WHERE 
-    name LIKE '%sandwitch%' OR 
-    name LIKE '%sandwitches%' OR 
-    name LIKE '%sundaes%' OR 
-    name LIKE '%sundae%' OR 
-    name LIKE '%stick%' OR 
-    name LIKE '%sticks%' OR 
-    name LIKE '%bar%' OR 
-    name LIKE '%bars%' OR 
-    name LIKE '%blizzard%' OR 
-    name LIKE '%cups%' OR 
-    name LIKE '%cup%' OR 
-    name LIKE '%cones%' OR 
-    name LIKE '%cone%' OR 
-    name LIKE '%mochi%' OR 
-    name LIKE '%tacos%' OR 
-    name LIKE '%pie%' OR 
-    name LIKE '%pies%' OR 
-    name LIKE '%bombs%' OR 
-    name LIKE '%macrones%' OR 
-    name LIKE '%popsicles%' OR 
-    name LIKE '%screwballs%';
+    -- Check if the name matches any of the specified patterns
+    IF NOT (@name LIKE '%sandwitch%' OR 
+            @name LIKE '%sandwitches%' OR 
+            @name LIKE '%sundaes%' OR 
+            @name LIKE '%sundae%' OR 
+            @name LIKE '%stick%' OR 
+            @name LIKE '%sticks%' OR 
+            @name LIKE '%bar%' OR 
+            @name LIKE '%bars%' OR 
+            @name LIKE '%blizzard%' OR 
+            @name LIKE '%cups%' OR 
+            @name LIKE '%cup%' OR 
+            @name LIKE '%cones%' OR 
+            @name LIKE '%cone%' OR 
+            @name LIKE '%mochi%' OR 
+            @name LIKE '%tacos%' OR 
+            @name LIKE '%pie%' OR 
+            @name LIKE '%pies%' OR 
+            @name LIKE '%bombs%' OR 
+            @name LIKE '%macarones%' OR 
+            @name LIKE '%popsicles%' OR 
+            @name LIKE '%screwballs%')
+    BEGIN
+        -- If the name does not match, raise an error and rollback the transaction
+        RAISERROR('The product name does not meet the required keywords.', 16, 1);
+        ROLLBACK TRANSACTION;
+    END
+END;
 
-end;
+
+CREATE PROCEDURE InsertProduct
+    @name VARCHAR(100),
+    @singlep INT,
+    @doublep INT,
+    @familyp INT,
+    @path VARCHAR(100)
+AS
+BEGIN
+    INSERT INTO product (name, singlep, doublep, familyp, path)
+    VALUES (@name, @singlep, @doublep, @familyp, @path);
+END;
+--------------------show product-------------------
+CREATE PROCEDURE show_product
+    @name VARCHAR(50),
+    @singlep VARCHAR(50) OUTPUT,
+    @doublep VARCHAR(50) OUTPUT,
+    @familyp VARCHAR(50) OUTPUT,	  
+    @path VARCHAR(50) OUTPUT		
+AS
+BEGIN
+    DECLARE @s_p VARCHAR(50), @d_p VARCHAR(50), @f_p VARCHAR(50), @p VARCHAR(50);
+
+   
+    DECLARE @show_Table TABLE (
+	    name varchar(100),
+        singlep VARCHAR(50),
+        doublep VARCHAR(50),
+        familyp VARCHAR(50),
+        path VARCHAR(50)
+    );
+
+    
+    INSERT INTO @show_Table (name,singlep, doublep, familyp, path)
+    SELECT name,singlep, doublep, familyp, path
+    FROM product 
+    WHERE name = @name;
+
+   
+    SELECT 
+        @singlep = singlep,
+        @doublep = doublep,
+        @familyp = familyp,
+        @path = path
+    FROM @show_Table;
+
+   
+    SELECT name,singlep, doublep, familyp, path FROM @show_Table;
+END;
+
+
 ---------------------------orders-------------------
 create proc order_proc(
 @dt datetime,
