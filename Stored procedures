@@ -247,3 +247,31 @@ BEGIN
 		ROLLBACK TRANSACTION  
     END
 END;
+--------update------
+CREATE PROCEDURE updateProduct
+    @name VARCHAR(100),
+    @singlep INT,
+    @doublep INT,
+    @familyp INT,
+    @path VARCHAR(100)
+AS
+BEGIN
+    UPDATE product SET  singlep = @singlep,  doublep = @doublep, familyp = @familyp, path = @path WHERE name = @name;
+    
+END;
+
+CREATE TRIGGER trg_update_PROC
+ON product
+AFTER update
+AS
+BEGIN
+
+    DECLARE @count int=0
+    SELECT @count=count(*) FROM inserted;
+
+    IF @count=0
+    BEGIN
+        RAISERROR('Product does not exist.', 16, 1);
+		ROLLBACK TRANSACTION  
+    END
+END;
