@@ -191,3 +191,12 @@ SELECT name, object_definition(object_id) AS definition, create_date
 FROM sys.procedures;
 -----drop proc------------
 DROP PROCEDURE fetch_diff;
+------order id_--------------
+CREATE PROCEDURE Order_id(
+  @id VARCHAR(100) )
+AS
+BEGIN
+   
+
+    Select top 1 * from orders order by order_id  desc ;
+END;
