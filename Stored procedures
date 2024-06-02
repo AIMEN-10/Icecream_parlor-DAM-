@@ -200,3 +200,25 @@ BEGIN
 
     Select top 1 * from orders order by order_id  desc ;
 END;
+-----------form 8--------------
+CREATE PROCEDURE admin_display(
+  @a  VARCHAR(100),
+   @b VARCHAR(100)
+  )
+AS
+BEGIN
+   
+   
+    Select * from orders ;
+END;
+
+CREATE PROCEDURE admin_display_det(
+  @a  VARCHAR(100)
+  
+  )
+AS
+BEGIN
+   
+   
+    Select * from orders_list where order_id=@a ;
+END;
