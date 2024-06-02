@@ -222,3 +222,28 @@ BEGIN
    
     Select * from orders_list where order_id=@a ;
 END;
+
+----delete (CHECK POINT)
+CREATE PROCEDURE DelETE_PROC
+    @name VARCHAR(100)
+AS
+BEGIN
+    DELETE FROM product WHERE name = @name;
+END;
+
+
+CREATE TRIGGER trg_delETE_PROC
+ON product
+AFTER DELETE
+AS
+BEGIN
+
+    DECLARE @count int=0
+    SELECT @count=count(*) FROM deleted;
+
+    IF @count=0
+    BEGIN
+        RAISERROR('Product does not exist.', 16, 1);
+		ROLLBACK TRANSACTION  
+    END
+END;
