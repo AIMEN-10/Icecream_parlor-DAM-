@@ -161,3 +161,33 @@ BEGIN
   
     SELECT Password FROM @PasswordTable;
 END;
+--------------------form 6 display-------------
+CREATE PROCEDURE fetch_p(
+ @s VARCHAR(100),
+    @p VARCHAR(100)
+	)
+AS
+BEGIN
+   
+    SELECT * FROM product  WHERE name LIKE '%' + @s + '%' OR name LIKE '%' + @p + '%';
+END;
+
+CREATE PROCEDURE fetch_diff(
+   @a VARCHAR(100) ,
+    @b VARCHAR(100),
+    @c VARCHAR(100),
+    @d VARCHAR(100),
+    @e VARCHAR(100) ,
+	 @f VARCHAR(100) 
+	)
+AS
+BEGIN
+   
+    SELECT * FROM product  WHERE name LIKE '%' + @a + '%' OR name LIKE '%' + @b + '%' OR name LIKE '%' + @c + '%' OR name LIKE '%' + @d + '%' OR name LIKE '%' + @e + '%' OR name LIKE '%' + @f + '%';
+END;
+
+--------to display procedures ------------------
+SELECT name, object_definition(object_id) AS definition, create_date
+FROM sys.procedures;
+-----drop proc------------
+DROP PROCEDURE fetch_diff;
