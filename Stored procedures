@@ -69,22 +69,22 @@ BEGIN
 END;
 --------------------show product-------------------
 CREATE PROCEDURE show_product
-    @name VARCHAR(50),
-    @singlep VARCHAR(50) OUTPUT,
-    @doublep VARCHAR(50) OUTPUT,
-    @familyp VARCHAR(50) OUTPUT,	  
-    @path VARCHAR(50) OUTPUT		
+    @name VARCHAR(100),
+    @singlep VARCHAR(100) OUTPUT,
+    @doublep VARCHAR(100) OUTPUT,
+    @familyp VARCHAR(100) OUTPUT,	  
+    @path VARCHAR(255) OUTPUT		
 AS
 BEGIN
-    DECLARE @s_p VARCHAR(50), @d_p VARCHAR(50), @f_p VARCHAR(50), @p VARCHAR(50);
+    DECLARE @s_p VARCHAR(100), @d_p VARCHAR(100), @f_p VARCHAR(100), @p VARCHAR(255);
 
    
     DECLARE @show_Table TABLE (
 	    name varchar(100),
-        singlep VARCHAR(50),
-        doublep VARCHAR(50),
-        familyp VARCHAR(50),
-        path VARCHAR(50)
+        singlep VARCHAR(100),
+        doublep VARCHAR(100),
+        familyp VARCHAR(100),
+        path VARCHAR(255)
     );
 
     
